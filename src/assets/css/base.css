@@ -1,0 +1,21 @@
+*{
+    margin:0;
+    padding:0;
+}
+ul,li{
+    list-style:none;
+}
+input{
+    outline: none;
+}
+.button{
+    display:flex;
+    width:100%;
+    align-items:center;
+    justify-content: center;
+    padding:.24rem 0;
+    border-radius:1rem 1rem;
+}
+a{
+    text-decoration: none;
+}
