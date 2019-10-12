@@ -8,8 +8,8 @@
     <div class="footer-serve" v-show="show">
         <van-overlay :show="show" @click="show = false" />
         <div class="serve">
-            <img src="@/assets/images/icon/add-ftw.png" alt="">
-            <img src="@/assets/images/icon/add-fhd.png" alt="">
+            <img @click="handleClickPush(5)" src="@/assets/images/icon/add-ftw.png" alt="">
+            <img @click="handleClickPush(6)" src="@/assets/images/icon/add-fhd.png" alt="">
         </div>
     </div>
 </div>
@@ -59,8 +59,17 @@
                     case 2 :
                         this.show = true;
                     break;
-                    default:
-                        // this.$router.push('/webpage/activity');
+                    case 3 :
+                        this.$router.push('/webpage/store');
+                    break;
+                    case 4 :
+                        this.$router.push('/webpage/my');
+                    break;
+                    case 5 :
+                        this.$router.push('/dynamic');
+                    break;
+                    case 6 :
+                        this.$router.push('/dynamic/activity');
                     break;
                 }
             }

@@ -5,6 +5,9 @@
 ul,li{
     list-style:none;
 }
+i,em{
+    font-style:normal;
+}
 input{
     outline: none;
 }
@@ -18,4 +21,12 @@ input{
 }
 a{
     text-decoration: none;
+}
+.background{
+    display:block;
+    min-height:100vh;
+    background-color:#EEEEEE;
+}
+.van-overlay{
+    background-color: rgba(0,0,0,.5) !important;
 }

@@ -5,6 +5,8 @@ import Router from 'vue-router'
 import webpage from './components/webpage/index'
 import webPageHome from './components/webpage/home'
 import webPageActivity from './components/webpage/activity'
+import webPageStore from './components/webpage/store'
+import webPageMy from './components/webpage/my'
 // 登录
 import log from './components/log/index'
 import loGin from './components/log/login'
@@ -17,6 +19,18 @@ import HomeComment from './views/home/comment'
 
 import Activity from './views/activity/index'
 import ActivityDetails from './views/activity/details'
+
+import Dynamic from './views/dynamic/index'
+import DynamicName from './views/dynamic/dynamic'
+import DynamicActivity from './views/dynamic/activity'
+
+import Store from './views/store/index'
+import StoreName from './views/store/this'
+import StoreDetails from './views/store/details'
+import StoreCounter from './views/store/counter'
+import StorePay from './views/store/pay'
+import StoreSite from './views/store/site'
+import StoreEdit from './views/store/edit'
 Vue.use(Router)
 
   // mode: 'history',
@@ -43,7 +57,15 @@ export default new Router({
         {
           path:'activity',
           component:webPageActivity
-        }
+        },
+        {
+          path:'store',
+          component:webPageStore
+        },
+        {
+          path:'my',
+          component:webPageMy
+        },
       ]
     },
     {
@@ -101,6 +123,60 @@ export default new Router({
         }
         
       ]
-    }
+    },
+    {
+      path:'/dynamic',
+      component:Dynamic,
+      children:[
+        {
+          path:'/',
+          redirect:'this'
+        },
+        {
+          path:'this',
+          component:DynamicName
+        },
+        {
+          path:'activity',
+          component:DynamicActivity
+        }
+        
+      ]
+    },
+    {
+      path:'/store',
+      component:Store,
+      children:[
+        {
+          path:'/',
+          redirect:'this'
+        },
+        {
+          path:'this',
+          component:StoreName
+        },
+        {
+          path:'details',
+          component:StoreDetails
+        },
+        {
+          path:'counter',
+          component:StoreCounter
+        },
+        {
+          path:'pay',
+          component:StorePay
+        },
+        {
+          path:'site',
+          component:StoreSite
+        },
+        {
+          path:'edit',
+          component:StoreEdit
+        },
+        
+      ]
+    },
   ]
 })
