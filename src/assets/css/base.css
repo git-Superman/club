@@ -30,3 +30,7 @@ a{
 .van-overlay{
     background-color: rgba(0,0,0,.5) !important;
 }
+@keyframes baseBottom{
+    0%{ transform:translateY(300px) }
+    100%{  transform:translateY(0); }
+}

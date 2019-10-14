@@ -31,6 +31,20 @@ import StoreCounter from './views/store/counter'
 import StorePay from './views/store/pay'
 import StoreSite from './views/store/site'
 import StoreEdit from './views/store/edit'
+import StoreOTC from './views/store/OTC'
+import StoreIssue from './views/store/issue'
+
+import My from './views/my/index'
+import MyInfo from './views/my/info'
+import MyPassword from './views/my/changePassword'
+import MyPhone from './views/my/changePhone'
+import MyImageText from './views/my/imageText'
+import MyImageTextDetails from './views/my/imageTextDetails'
+import MyActivity from './views/my/activity'
+import MyEnshrine from './views/my/enshrine'
+import MyCommodity from './views/my/commodity'
+import MyCommodityDetails from './views/my/commodityDetails'
+
 Vue.use(Router)
 
   // mode: 'history',
@@ -52,18 +66,22 @@ export default new Router({
         },
         {
           path:'home',
+          name:'home',
           component:webPageHome
         },
         {
           path:'activity',
+          name:'activity',
           component:webPageActivity
         },
         {
           path:'store',
+          name:'store',
           component:webPageStore
         },
         {
           path:'my',
+          name:'my',
           component:webPageMy
         },
       ]
@@ -175,8 +193,62 @@ export default new Router({
           path:'edit',
           component:StoreEdit
         },
+        {
+          path:'otc',
+          component:StoreOTC
+        },
+        {
+          path:'issue',
+          component:StoreIssue
+        },
         
       ]
     },
+    {
+      path:'/my',
+      component:My,
+      children:[
+        {
+          path:'/',
+          redirect:'info'
+        },
+        {
+          path:'info',
+          component:MyInfo
+        },
+        {
+          path:'pass',
+          component:MyPassword
+        },
+        {
+          path:'phone',
+          component:MyPhone
+        },
+        {
+          path:'image-text',
+          component:MyImageText
+        },
+        {
+          path:'image-text-details',
+          component:MyImageTextDetails
+        },
+        {
+          path:'activity',
+          component:MyActivity
+        },
+        {
+          path:'enshrine',
+          component:MyEnshrine
+        },
+        {
+          path:'commodity',
+          component:MyCommodity
+        },
+        {
+          path:'commodity-details',
+          component:MyCommodityDetails
+        },
+      ]
+    }
   ]
 })

@@ -2,8 +2,10 @@
 <div>
     <div class="title">活动</div>
     <div class="input">
-        <input type="text" placeholder="输入昵称、活动名称等查询活动" >
-        <img class="left" src="@/assets/images/icon/hd-searchbtn.png" alt="">
+        <div>
+            <input type="text" placeholder="输入昵称、活动名称等查询活动" >
+            <img class="left" src="@/assets/images/icon/hd-searchbtn.png" alt="">
+        </div>
         <img @click="show = true" class="right" src="@/assets/images/icon/hd-sxbtn.png" alt="">
     </div>
     <ul class="activity" v-for="i in 5" :key="i" @click="handleClickPush('活动')">
@@ -126,25 +128,30 @@
     justify-content: space-between;
     align-items:center;
     position:relative;
-    input{
-        display:block;
+    div{
         width:100%;
-        background-color: @color-e;
-        border:0;
-        box-sizing: border-box;
-        padding:.12rem .28rem;
-        border-radius:1rem 1rem;
-    }
-    input::-webkit-input-placeholder{
-        font-size:@font-a;
+        position:relative;
+        input{
+            display:block;
+            width:100%;
+            background-color: @color-e;
+            border:0;
+            box-sizing: border-box;
+            padding:.12rem .28rem;
+            border-radius:1rem 1rem;
+        }
+        input::-webkit-input-placeholder{
+            font-size:@font-a;
+        }
+        .left{
+            position:absolute;
+            left:86%;top:.04rem;
+            background-color:@color-e;
+        }
     }
     img{
         width:.6rem;
         flex-shrink:0;
-    }
-    .left{
-        position:absolute;
-        left:70%;
     }
     .right{
         padding-left:.52rem;

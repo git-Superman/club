@@ -17,7 +17,6 @@
 <script>
 import navBar from '../navBar'
 import areaList from '@/assets/js/area.js'
-console.log(areaList);
 export default {
   data() {
     return {
@@ -49,3 +48,10 @@ export default {
     }
 }
 </script>
+<style lang="less" scoped>
+/deep/ .van-button--danger {
+  color: #fff;
+  background-color: #8B2C18;
+  border: 1px solid #8B2C18;
+}
+</style>

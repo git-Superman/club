@@ -1,9 +1,7 @@
 <template>
 <div class="home">
-    <div class="home-head">
-        <img src="@/assets/images/icon/mian-logo.png" alt="">
-    </div>
-    <ul class="list" v-for="i in 3" :key="i">
+    <myNavbar test='返回'></myNavbar>
+    <ul class="list">
         <li class="list-head">
             <div class="img">
                 <img src="@/assets/images/img/mian-face.png" alt="">
@@ -12,6 +10,7 @@
                 <p>Cameron AJ</p>
                 <span>15分钟前</span>
             </div>
+            <div class="list-head-delete"><img src="@/assets/images/icon/bj-delet.png" alt=""></div>
         </li>
         <li class="list-ban">
             <img src="@/assets/images/img/mian-pimg.png" alt="">
@@ -60,9 +59,12 @@
             </div>
         </div>
     </div>
+    <myDiscuss></myDiscuss>
 </div>
 </template>
 <script>
+import myNavbar from '../navBar'
+import myDiscuss from '../discuss'
     export default {
         data(){
             return {
@@ -77,7 +79,11 @@
                     this.$router.push('/home/comment');
                 }
             }
-        }
+        },
+        components:{
+            myNavbar,
+            myDiscuss
+    }
     }
 </script>
 <style lang="less" rel="stylesheet/less">
@@ -87,22 +93,12 @@
 @color-6:#666666;
 @color-3:#333333;
 @font-a:.28rem;
-.home{
-    .home-head{
-        display:flex;
-        justify-content: center;
-        padding:.32rem 0;
-        border-bottom:1px solid @color-e;
-        img{
-            height:.4rem;
-        }
-    }
-}
 .list{
     .list-head{
         box-sizing: border-box;
         padding:.32rem;
         display:flex;
+        position:relative;
         .img{
             width:1rem;
             height:1rem;
@@ -118,6 +114,14 @@
                 padding-top:.2rem;
                 color:@color-6;
                 font-size:@font-a;
+            }
+        }
+        .list-head-delete{
+            position:absolute;
+            bottom:.24rem;
+            right:.24rem;
+            img{
+                width:.4rem;
             }
         }
     }
@@ -169,9 +173,7 @@
         margin-top:.04rem;
     }
 }
-// .alert{
-//     animation: baseBottom .2s;
-// }
+
 .share{
     position:fixed;
     bottom:0;
@@ -199,9 +201,6 @@
         img{
             width:1rem;
             flex-shrink: 0;
-        }
-        img:nth-child(2){
-            width:1.2rem;
         }
     }
 }

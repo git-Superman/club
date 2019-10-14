@@ -3,7 +3,7 @@
     <div class="Tit">
         <span class="first" @click="handleClickGo">{{left}}</span>
         <p>{{center}}</p>
-        <img class="last" :src="right"/>
+        <img class="last" @click="handleClickOTC" :src="right"/>
     </div>
     <div style="padding-top:1rem" />
 </div>
@@ -16,6 +16,9 @@
                 if(this.left){
                     this.$router.go(-1);
                 }
+            },
+            handleClickOTC(){
+                this.$router.push('/store/otc');
             }
         }
     }

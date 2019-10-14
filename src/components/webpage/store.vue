@@ -6,6 +6,7 @@
                 <img @click="handleClickPush" class="max" ref="max" src="@/assets/images/img/mian-pimg.png" alt="">
                 <img class="min" ref="min" :style="{height:minHeight+'px'}" src="@/assets/images/img/hd-img1.png" alt="">
                 <img class="min" ref="min" :style="{height:minHeight+'px'}" src="@/assets/images/img/hd-img2.png" alt="">
+                <span class="btMsg a">热门推荐</span>
             </div>
             <div>
                 <img class="min" ref="min" src="@/assets/images/img/hd-img1.png" alt="">
@@ -16,9 +17,10 @@
                 <img class="min" ref="min" src="@/assets/images/img/hd-img2.png" alt="">
             </div>
             <div class="images-right">
-                <img class="max" :style="{height:maxHeight+'px'}" src="@/assets/images/img/mian-pimg.png" alt="">
+                <img class="max" @click="handleClickPush" :style="{height:maxHeight+'px'}" src="@/assets/images/img/mian-pimg.png" alt="">
                 <img class="min" :style="{height:minHeight+'px'}" src="@/assets/images/img/hd-img1.png" alt="">
                 <img class="min" :style="{height:minHeight+'px'}" src="@/assets/images/img/hd-img2.png" alt="">
+                <span class="btMsg b">最近更新</span>
             </div>
             
         </main>
@@ -64,6 +66,28 @@ import icon from '@/assets/images/icon/shop-sqgt.png'
     font-size:0;
     padding-bottom:1.2rem;
     background-color:#EEEEEE;
+    >div{
+        position:relative;
+    }
+    >div::after{
+        content:'';
+        display:block;
+        clear: both;
+    }
+    .btMsg{
+        font-size:.28rem;
+        position: absolute;
+        bottom:.2rem;
+        font-weight: bold;
+        z-index:99;
+        color:#fff;
+    }
+    .btMsg.a{
+        left:.24rem;
+    }
+    .btMsg.b{
+        right:.24rem;
+    }
     .max{
         width:66.66%;
     }

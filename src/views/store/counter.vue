@@ -116,6 +116,7 @@
         position:fixed;
         width:100%;
         top:0;
+        z-index: 9999999;
         color:@color-6;
         font-size:@font-a;
         align-items:center;

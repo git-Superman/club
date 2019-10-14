@@ -56,3 +56,14 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+/deep/ .van-address-item .van-radio__icon--checked .van-icon{
+  background-color: #373737;
+  border-color: #373737;
+}
+/deep/ .van-button--danger {
+  color: #fff;
+  background-color: #8B2C18;
+  border: 1px solid #8B2C18;
+}
+</style>
