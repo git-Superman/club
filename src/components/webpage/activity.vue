@@ -8,45 +8,7 @@
         </div>
         <img @click="show = true" class="right" src="@/assets/images/icon/hd-sxbtn.png" alt="">
     </div>
-    <ul class="activity" v-for="i in 5" :key="i" @click="handleClickPush('活动')">
-        <li class="activity-title">
-            <div class="img">
-                <img src="@/assets/images/img/mian-face.png" alt="">
-            </div>
-            <div class="test">
-                <p>Cameron AJ</p>
-                <span>15分钟前</span>
-            </div>
-        </li>
-        <li class="activity-item">
-            <p>秋天到啦~！周末一起去赏枫叶啊~秋天到啦~！周末一起去赏枫叶啊~秋天到啦~！周末一起去赏枫叶啊~秋天到啦~！周末一起去赏枫叶啊~秋天到啦~！周末一起去赏枫叶啊~</p>
-        </li>
-        <li class="activity-item">
-            <img src="@/assets/images/icon/hd-timeicon.png" alt="">
-            <span>9月20日 07:00</span>
-        </li>
-        <li class="activity-item">
-            <img src="@/assets/images/icon/hd-dzicon.png" alt="">
-            <span>徐州.西山枫叶公园</span>
-        </li>
-        <li class="activity-img">
-            <img src="@/assets/images/img/hd-img1.png" alt="">
-            <img src="@/assets/images/img/hd-img2.png" alt="">
-        </li>
-        <li class="list-title">
-            <div class="left">
-                <img @click="handleClickPush('点赞')" src="@/assets/images/icon/mian-dz.png" alt="">
-                <img @click="handleClickPush('评论')" src="@/assets/images/icon/mian-ly.png" alt="">
-                <img @click="show = true" src="@/assets/images/icon/mian-zf.png" alt="">
-            </div>
-            <div class="right">
-                <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                <p>等153人觉得赞</p>
-            </div>
-        </li>
-    </ul>
+    
     <div class="alert" v-if="show">
         <van-overlay :show="show" @click="show = false" />
         <div class="share">
@@ -83,23 +45,134 @@
             </ul>
         </div>
     </div>
+    <div ref="main" class="mainStroll">
+       <ul class="activity" v-for="(item,i) in list" :key="i">
+        <li class="activity-title"  @click="handleClick(item.id)">
+            <div class="img">
+                <img :src="item.headPic?item.headPic : HeadImg" alt="">
+            </div>
+            <div class="test" @click="handleClick(item.id)">
+                <p>{{item.userName ? item.userName : '匿名用户'}}</p>
+                <span>{{item.addDate?item.addDate.split("T")[0]:''}}</span>
+            </div>
+        </li>
+        <li class="activity-item" @click="handleClick(item.id)">
+            <p>{{item.contents}}</p>
+        </li>
+        <li class="activity-item">
+            <img src="@/assets/images/icon/hd-timeicon.png" alt="">
+            <span>{{item.openTime?item.openTime.split("T")[0]:''}}</span>
+        </li>
+        <li class="activity-item">
+            <img src="@/assets/images/icon/hd-dzicon.png" alt="">
+            <span>{{item.cityName}}</span>
+        </li>
+        <li class="activity-img">
+            <img v-for="(it,inx) in item.imgList" :key="inx" v-show="!it" src="it" alt="">
+        </li>
+        <li class="list-title">
+            <div class="left">
+                <img @click="handleClickPush(item.id)" src="@/assets/images/icon/mian-dz.png" alt="">
+                <!-- <img @click="handleClickPush('评论')" src="@/assets/images/icon/mian-ly.png" alt=""> -->
+                <img @click="show = true" src="@/assets/images/icon/mian-zf.png" alt="">
+            </div>
+            <div class="right">
+                <p>{{item.zan?'等'+item.zan+'人觉得赞' : '等0人觉得赞'}}</p>
+            </div>
+        </li>
+    </ul>
+    </div>
 </div>
 </template>
 <script>
+import { imgURL } from '~api/config'
+import HeadImg from '@/assets/images/img/20131204184148_hhXUT.jpeg'
+
+import isTrue from '@/assets/images/icon/twdt-ydz.png'
+import isFalse from '@/assets/images/icon/twdt-dz.png'
+
+import DropDown from '@/views/DropDown'
+
     export default {
         data() {
             return {
-                show : false
+                show : false,
+                list : [],
+                imgURL,
+                HeadImg,
+                isScrollTop : false,
+                pg : 1
             }
         },
+        components:{
+            DropDown
+        },
+        created(){
+            this.reload(this.pg,30);
+        },
+        mounted(){
+            this.onRefresh();
+            // 滚动事件
+            this.$refs.main.addEventListener('scroll',this.onRefresh);
+        },
         methods:{
-            handleClickPush(test){
-                if(test === "点赞"){
-                    this.$router.push('/home/give');
-                }else if(test === "评论"){
-                    this.$router.push('/home/comment');
-                }else if(test === "活动"){
-                    this.$router.push('/activity')
+            onRefresh(){
+                var main = this.$refs.main;
+                var scrollTop = main.scrollTop , mainHeight = main.offsetHeight , scrollHeight= main.scrollHeight;
+
+                if((scrollTop + mainHeight + 60) >= scrollHeight){
+                    if(this.isScrollTop){
+                        this.isScrollTop = false;
+                        var pg = this.pg;
+                        pg++;
+                        this.pg = pg;
+                        this.reload(this.pg,10);
+                    }
+                }
+                
+            },
+            handleClick(id){
+                this.$router.push({path:`/activity/details/${id}`})
+            },
+            handleClickPush(id){
+                // if(test === "点赞"){
+                    this.$router.push('/home/give/'+id);
+                // }else if(test === "评论"){
+                //     this.$router.push('/home/comment');
+                // }
+            },
+            reload(pg,size){
+                var url = `/User/GetUserEventList?pg=${pg}&size=${size}`;
+                var that = this;
+                this.axios.post(url).then(res=>{
+                    console.log(res.data);
+                    var data = res.data;
+                    if(res.code == 0){
+                        this.isScrollTop = true;
+                        data.forEach(item => {
+                            var imgs = item.img;
+                            if(imgs) {
+                                item.imgList = imgs.split("|")
+                            }else{
+                                item.imgList = []
+                            }
+                            
+                        });
+                        this.list = this.list.concat(data);
+                        console.log(this.list);
+                    }
+                })
+            },
+            loadmore(){
+                //可滚动容器的高度
+                let innerHeight = document.querySelector('#app').clientHeight;
+                //屏幕尺寸高度
+                let outerHeight = document.documentElement.clientHeight;
+                //可滚动容器超出当前窗口显示范围的高度
+                let scrollTop = document.documentElement.scrollTop+60;
+                if (innerHeight < (outerHeight + scrollTop)) {
+                    //加载更多操作
+                    console.log("loadmore");
                 }
             }
         }
@@ -113,8 +186,13 @@
 @color-3:#333333;
 @font-a:.28rem;
 .title{
+    width:100%;
+    position:fixed;
+    top:0;
+    background-color:#fff;
+    z-index:2020;
     box-sizing: border-box;
-    padding:.32rem;
+    height:1rem;
     display:flex;
     justify-content: center;
     align-items:center;
@@ -159,6 +237,7 @@
 }
 .activity{
     border-top:1px solid @color-e;
+    padding-top:1rem;
     .activity-title{
         box-sizing: border-box;
         padding:.12rem .32rem;
@@ -171,6 +250,8 @@
             img{
                 width:100%;
                 height:100%;
+                border-radius:50%;
+                box-shadow: 0 0 2px #000;
             }
         }
         .test{
@@ -233,6 +314,15 @@
         }
     }
 }
+
+
+.mainStroll{
+    position:fixed;
+    width:100%;
+    height:82%;
+    overflow-y: auto;
+}
+
 
 .share{
     position:fixed;

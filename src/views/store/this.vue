@@ -1,31 +1,22 @@
 <template>
 <div>
     <myTitle left="返回" center="户外商城" :right="icon"></myTitle>
-<div v-for="i in 12" :key="i" style="border-top:3px solid #EEEEEE">
+<div v-for="(item,index) in list" :key="index" style="border-top:3px solid #EEEEEE">
     <div class="activity-title">
         <div class="img">
             <img src="@/assets/images/img/shop-dpface.png" alt="">
         </div>
         <div class="test">
-            <p>Cameron户外店</p>
-            <span>15分钟前</span>
+            <p>{{item.name}}</p>
+            <span>{{item.addDate.split('T')[0]}}</span>
         </div>
     </div>
     <van-swipe :autoplay="3000" @change="onChange">
-        <van-swipe-item class="van-swipe-item">
-            <img src="@/assets/images/img/shop-spimg.png" @click="handleClickPush('1')" alt="">
-        </van-swipe-item>
-        <van-swipe-item class="van-swipe-item">
-            <img src="@/assets/images/img/shop-spimg.png" @click="handleClickPush('1')" alt="">
-        </van-swipe-item>
-        <van-swipe-item class="van-swipe-item">
-            <img src="@/assets/images/img/shop-spimg.png" @click="handleClickPush('1')" alt="">
-        </van-swipe-item>
-        <van-swipe-item class="van-swipe-item">
-            <img src="@/assets/images/img/shop-spimg.png" @click="handleClickPush('1')" alt="">
+        <van-swipe-item class="van-swipe-item" v-for="(it,i) in item.imgLIST" :key="i" v-if="it != imgURL">
+            <img :src="it" @click="handleClickPush(index)" alt="">
         </van-swipe-item>
         <div class="custom-indicator" slot="indicator">
-            {{ current + 1 }}/4
+            {{ current + 1 }}/{{item.imgLIST.length-1}}
         </div>
     </van-swipe>
     <ul class="list-content">
@@ -85,13 +76,23 @@
 <script>
     import myTitle from '../title'
     import icon from "@/assets/images/icon/shop-sqgt.png"
+    import { imgURL } from '~api/config'
     export default {
         data() {
             return {
                 icon,
                 current: 0,
-                show : false
+                show : false,
+                list : [],
+                imgURL
             }
+        },
+        created(){
+            var id = this.$route.params.id;
+            this.init(id);
+            // this.axios.post('/Shop/GetMyShop').then(res=>{
+            //     console.log(res);
+            // })
         },
         methods:{
             onChange(index) {
@@ -105,6 +106,30 @@
                 }else{
                     this.$router.push('/store/details');
                 }
+            },
+            init(id){
+                this.axios.post(`/Shop/GetProductList?Cid=${id}`).then(res=>{
+                    if(res.code == 0){
+                        var data = res.data;
+                        console.log(data);
+                        var images = null;
+                        data.forEach((item,index) => {
+                            if(item.img){
+                                images = item.img.split("|");
+                                images.forEach((it,i)=>{
+                                    images[i] = imgURL + it;
+                                })
+                                data[index].imgLIST = images;
+                            }else{
+                                data[index].imgLIST = []
+                            }
+                        });
+                        this.list = data;
+
+                    }else{
+                        this.$toast("加载失败，请稍后再试！");
+                    }
+                })
             }
         },
         components:{
@@ -124,6 +149,7 @@
     .van-swipe-item{
         img{
             width:100%;
+            height:5rem;
         }
     }
     .custom-indicator{

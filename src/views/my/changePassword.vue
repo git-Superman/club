@@ -2,17 +2,17 @@
 <div class="info background">
     <myTitle test="修改密码" right="确定" @confirm="handleClick"/>
     <main>
-        <div class="dynamic-input">
+        <!-- <div class="dynamic-input">
             <span>旧密码</span>
             <input type="text" placeholder="输入您过去登录的密码">
-        </div>
+        </div> -->
         <div class="dynamic-input">
             <span>新密码</span>
-            <input type="text" placeholder="输入您设定的新密码">
+            <input type="password" v-model="Pwds" placeholder="输入您设定的新密码">
         </div>
         <div class="dynamic-input">
             <span>确认密码</span>
-            <input type="text" placeholder="再次输入密码以确认无误">
+            <input type="password" v-model="Pwd" placeholder="再次输入密码以确认无误">
         </div>
     </main>
 </div>    
@@ -22,6 +22,8 @@ import myTitle from '../my-title'
 export default {
     data() {
         return {
+            Pwds:'',
+            Pwd:''
         }
     },
     components:{
@@ -29,7 +31,25 @@ export default {
     },
     methods:{
         handleClick(){
-            console.log('保存');
+            this.init();    
+        },
+        init(){
+            var Pwd = this.Pwd;
+            var Pwds = this.Pwds;
+            if(Pwd == Pwds){
+                var url =  `/User/UserPassEdit?Pwd=${Pwds}`;
+                this.axios.post(url).then(res=>{
+                    this.$toast(res.msg);
+                    this.Pwds = '';
+                    this.Pwd = '';
+                })
+            }else{
+                this.$toast('两次密码不一致！');
+                this.Pwds = '';
+                this.Pwd = '';
+
+            }
+            
         }
     }
 }

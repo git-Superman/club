@@ -2,15 +2,15 @@
 <div class="give">
     <myNavbar test='点赞用户'></myNavbar>
     <ul class="give">
-        <li class='give-item' v-for="i in 3" :key="i">
+        <li class='give-item' v-for="(item,i) in list" :key="i">
             <div class='left'>
-                <img src="@/assets/images/img/mian-dzface3.png" alt="">
+                <img :src="item.UserHeadPic" alt="">
                 <div>
-                    <p>Cameron AJ</p>
-                    <span>哈哈哈哈哈</span>
+                    <p>{{item.UserName}}</p>
+                    <span>{{item.Contents}}</span>
                 </div>
             </div>
-            <span>刚刚</span>
+            <span>{{item.AddTime}}</span>
         </li>
     </ul>
     <myHint></myHint>
@@ -20,9 +20,31 @@
     import myNavbar from '../navBar'
     import myHint from '../hint'
     export default {
+        data(){
+            return {
+                pg:1,
+                list : []
+            }
+        },
         components:{
             myNavbar,
             myHint
+        },
+        created(){
+            var id = this.$route.params.id;
+            this.init(id)
+        },
+        methods:{
+            init(id){
+                var pg = this.pg;
+                var url = `/User/GetUserDynamicZanList?articleID=${id}&pg=${pg}&size=10`;
+                this.axios.post(url).then(res=>{
+                    if(res.code == 0){
+                        this.list = res.data;
+                        console.log(this.list);
+                    }
+                })
+            }
         }
     }
 </script>

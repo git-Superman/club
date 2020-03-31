@@ -5,20 +5,20 @@
             <img src="@/assets/images/log/login-logo.png" alt="">
         </li>
         <li class="list-item">
-            <input type="text" placeholder="手机号码">
+            <input type="text" v-model="Account" placeholder="手机号码">
         </li>
         <li class="list-item">
-            <input type="password" placeholder="登录密码">
+            <input type="password" v-model="Pwd" placeholder="登录密码">
         </li>
         <li class="list-msg">
             <span @click="handleClickPush('忘记密码')">忘记密码？</span>
         </li>
         <li class="list-wx">
-            <img src="@/assets/images/log/login-wx.png" alt="">
-            <span>微信登录</span>
+            <!-- <img src="@/assets/images/log/login-wx.png" alt="">
+            <span>微信登录</span> -->
         </li>
         <li class="list-btn button">
-            <div>登录</div>
+            <div @click="handleClickGo">登录</div>
         </li>
         <li class="list-sign" @click="handleClickPush('立即注册')">
             <span>还没有账户，立即注册 ></span>
@@ -27,10 +27,13 @@
 </div>
 </template>
 <script>
+import { login } from '~api';
+
     export default {
         data(){
             return {
-
+                Account : '',
+                Pwd : ''
             }
         },
         methods:{
@@ -40,6 +43,30 @@
                 }else if(e === "立即注册"){
                     this.$router.push('/log/sign');
                 }
+            },
+            handleClickGo(){
+                var that = this,Account = that.Account,Pwd = that.Pwd;
+                if(!Account){
+                    that.$toast("请输入您的账号");
+                    return;
+                }else if(!Pwd){
+                    that.$toast("请输入您的密码");
+                    return;
+                }
+                // 登录
+                login({Account,Pwd}).then(res=>{
+                    var token = '';
+                    if(res.code === 0){
+                        token =  res.data.token;
+                        that.$toast(res.msg);
+                        localStorage.setItem('token',token);
+                        that.$router.replace({path:'/webpage/home'});
+                    }else{  
+                        this.$toast(res.msg);
+                        this.Pwd = "";
+                    }
+                });
+                
             }
         }
     }
@@ -102,7 +129,7 @@
         font-size:@font-a;
         display:flex;
         justify-content: center;
-        padding:.42rem 0;
+        margin:.42rem 0;
     }
 }
 </style>

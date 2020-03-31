@@ -4,13 +4,15 @@
     <main>
         <main class="uploader">
             <span>头像</span>
-            <van-uploader v-model="fileList" :max-count="1">
-                <img src="@/assets/images/img/mian-face.png" alt="">
+            <van-uploader :after-read="afterRead" v-model="fileList" :max-count="1">
+                <div class="headPic">
+                    <img v-if="userInfo.HeadPic" :src="userInfo.HeadPic?userInfo.HeadPic:'#'" alt="">
+                </div>
             </van-uploader>
         </main>
         <div class="dynamic-input">
             <span>昵称</span>
-            <input type="text" placeholder="It’s me">
+            <input ref="input" type="text" v-model="userInfo.UserName" placeholder="It’s me">
         </div>
     </main>
     <main>
@@ -23,7 +25,7 @@
         <div class="info-item" @click="handleClickPush('/my/phone')">
             <p>手机绑定</p>
             <div>
-                <span>15475875655</span>
+                <span>{{mobile}}</span>
                 <img src="@/assets/images/icon/spxq-jrdp.png" alt="">
             </div>
         </div>
@@ -31,19 +33,69 @@
 </div>    
 </template>
 <script>
+import { userNameEdit,uploadUserHeadPic } from '~api'
 import myTitle from '../my-title'
 export default {
     data() {
         return {
-            fileList:[]
+            fileList:[],
+            userInfo : {},
+            UserName:'',
+            HeadPic : '',
+            mobile : ''
         }
     },
     components:{
         myTitle
     },
+    created(){
+        this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        this.init();
+        this.initLoad();
+
+    },
     methods:{
+        afterRead(file){
+            var that = this;
+            var url = '/Uploads/UploadImg';
+            var leng = this.fileList.length-1;
+            file = file.file;
+            var param = new FormData();
+            param.append("file", file);
+            uploadUserHeadPic(param).then(res=>{
+                // console.log(res,123);
+                if(res.code === 0){
+                    // 长传文件成功
+                    that.$toast(res.msg);
+                }else{
+                    that.$toast(res.msg);
+                }
+            });
+        },
         handleClick(){
-            console.log('保存');
+            var that = this, UserName = that.UserName, HeadPic = that.HeadPic;
+
+            userNameEdit({UserName:that.userInfo.UserName}).then(res=>{
+                res = res.data;
+                console.log(res);
+            });
+        },
+        init(){
+            var url =  `/User/GetMySelfInfo`;
+            // this.axios.post(url).then(res=>{
+            //     console.log(res);
+            //     if(res.code == 0){
+            //         this.UserName = res.data.userName;
+            //     }
+            // })
+        },
+        initLoad(){
+            // this.axios.post('/User/GetMySelfInfo').then(res=>{
+            //         var data = res.data;
+            //         if(res.code == 0){
+            //             this.mobile = data.mobile;
+            //         }
+            //     })
         },
         handleClickPush(path){
             this.$router.push(path);
@@ -88,17 +140,24 @@ export default {
         background-color:#ffffff;
         display:flex;
         align-items: center;
+        .headPic{
+            width:1rem;
+            height:1rem;
+            border-radius:50%;
+            overflow: hidden;
+            border:2px solid #ededed;
+            box-shadow: 0 0 2px #ededed;
+            img{
+                width:100%;
+                height:100%;
+            }
+        }
         span{
             display:block;
             color:@color-6;
             font-size:@font-a;
             display:block;
             padding:0 .6rem 0 .32rem;
-        }
-        img{
-            width:1rem;
-            height:1rem;
-            border-radius:50%;
         }
     }
     .info-item{

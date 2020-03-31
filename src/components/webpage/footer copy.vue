@@ -1,7 +1,7 @@
 <template>
 <div class="ftp">
     <div class="footer">
-        <div class="footer-item" v-for="(item,index) in icon" :key="index" @click="handleClickPush(index)">
+        <div class="footer-item" :style="`background:url(${icons}) no-repeat`" v-for="(item,index) in icon" :key="index" @click="handleClickPush(index)">
             <img :src="index == inx? item.istrue : item.isfalse" :class="inx==2?'action':''" alt="">
         </div>
     </div>
@@ -66,6 +66,7 @@
         },
         mounted(){
             this.init();
+            console.log(this.icons);
         },
         methods:{
             handleClickPush(i){
@@ -128,7 +129,7 @@
     -moz-box-shdow:#000 -6px 3px 7px 1px;
 
     img{
-        width:.72rem;
+        width:.6rem;
         padding:.26rem 0;
         position:relative;
     }
@@ -137,7 +138,7 @@
         display:flex;
         align-items:center;
         justify-content: center;
-        background-color:#ffffff;
+        // background: url() no-repeat;
     }
     .footer-item:nth-child(3){
         img{

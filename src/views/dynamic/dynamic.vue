@@ -2,13 +2,17 @@
     <div class="dynamic">
         <header class="title">
             <span @click="handleClickGo">取消</span>
-            <span>发布</span>
-        </header>    
+            <span @click="init">发布</span>
+        </header>
+        <div class="dynamic-input">
+            <span>活动标题</span>
+            <input type="text" v-model="Title" placeholder="输入本次活动的主要内容…">
+        </div>
         <main class="uploader">
-            <van-uploader v-model="fileList" multiple />
+            <van-uploader :after-read="afterRead" v-model="fileList" multiple />
         </main>
         <div class="textarea">
-            <textarea placeholder="写下你此时此刻的感想吧…"></textarea>
+            <textarea placeholder="写下你此时此刻的感想吧…" v-model="Contents"></textarea>
             <img src="@/assets/images/icon/pl-emoji.png" alt="">
         </div>
     </div>
@@ -17,19 +21,50 @@
 export default {
     data() {
          return {
-             fileList: [
-                { url: 'https://img.yzcdn.cn/vant/cat.jpeg' },
-                // Uploader 根据文件后缀来判断是否为图片文件
-                // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-                { url: 'https://cloud-image', isImage: true } 
-            ]
+             fileList: [],
+             Title : '',
+             Contents : '',
+             Img : ''
          }
     },
     methods:{
         handleClickGo(){
             this.$router.go(-1);
         },
+        init(){
+            var Title = this.Title;
+            var Contents = this.Contents;
+            var Img = this.Img;
+            if(!Title){
+                this.$toast('请输入标题！');
+                return;
+            }
+            var url = `/User/DynamicAdd?Title=${Title}&Contents=${Contents}&Img=${Img}`;
+            this.axios.post(url).then(res=>{
+                if(res.code == 0){
+                    console.log(res);
+                    this.$toast(res.msg);
+                }else{
+                    this.$toast(res.msg);
+                }
+            })
+        },
+        afterRead(file){
+            var url = '/Uploads/UploadImg'
+            var leng = this.fileList.length-1;
+            file = file.file;
+            let param = new FormData();
+            param.append("file", file);
+            this.axios.post(url, param ).then(res=>{
+                if(res.code == 0){
+                    this.Img +=(res.data.src+'|');
+                }
+            }).catch(res=>{
+                this.$toast("发布失败，请稍后再试！");
+            })
+        },
     },
+    
     components:{
         
     }
@@ -83,5 +118,26 @@ export default {
         }
     }
 }
-
+.dynamic-input{
+        box-sizing: border-box;
+        padding:.24rem .12rem;
+        display:flex;
+        background-color:#fff;
+        align-items:center;
+        span{
+            color:@color-6;
+            font-size:@font-a;
+            flex-shrink: 0;
+            padding-right:.2rem;
+        }
+        input{
+            display:block;
+            width:100%;
+            border:0;
+            background-color:#fff;
+        }
+        ::-webkit-input-placeholder{
+            font-size:@font-a;
+        }
+    }
 </style>

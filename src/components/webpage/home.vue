@@ -3,47 +3,53 @@
     <div class="home-head">
         <img src="@/assets/images/icon/mian-logo.png" alt="">
     </div>
-    <ul class="list" v-for="i in 3" :key="i">
-        <li class="list-head">
-            <div class="img">
-                <img src="@/assets/images/img/mian-face.png" alt="">
-            </div>
-            <div class="test">
-                <p>Cameron AJ</p>
-                <span>15分钟前</span>
-            </div>
-        </li>
-        <li class="list-ban">
-            <img src="@/assets/images/img/mian-pimg.png" alt="">
-        </li>
-        <li>
-            <ul class="list-content">
-                <li class="list-title">
-                    <div class="left">
-                        <img @click="handleClickPush('点赞')" src="@/assets/images/icon/mian-dz.png" alt="">
-                        <img @click="handleClickPush('评论')" src="@/assets/images/icon/mian-ly.png" alt="">
-                        <img @click="show = true" src="@/assets/images/icon/mian-zf.png" alt="">
-                    </div>
-                    <div class="right">
-                        <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                        <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                        <img src="@/assets/images/img/mian-dzface1.png" alt="">
-                        <p>等153人觉得赞</p>
-                    </div>
-                </li>
-                <li>在路上……</li>
-                <li class="nbsp">
-                    <span>共 5 条回复</span>
-                </li>
-                <li class="nbsp">
-                    <p>Cameron AJ&nbsp;&nbsp;<span>回复&nbsp;吃可爱长大</span>&nbsp;哈哈哈</p>
-                </li>
-                <li class="nbsp">
-                    <p>吃可爱长大&nbsp;<span>是你说的地方吗？</span></p>
-                </li>
-            </ul>
-        </li>
-    </ul>
+    <div class="mainStroll" ref="main">
+        <ul class="list" v-for="(item,i) in list" :key="i">
+            <li class="list-head">
+                <div class="img" v-if="item.headPic">
+                    <img v-if="item.headPic" :src="imgURL + item.headPic" alt="">
+                </div>
+                <div class="test">
+                    <p>{{item.UserName}}</p>
+                    <span>{{item.addDate ?item.addDate.split('T')[0]:''}}</span>
+                </div>
+            </li>
+            <li class="list-ban" @click="handleDblclick(item.id,item.contents)">
+                <van-swipe indicator-color="white">
+                    <van-swipe-item v-for="(it,inx) in item.imgList" v-if="it" :key="inx">
+                        <img :src="imgURL + it" alt="">
+                    </van-swipe-item>
+                </van-swipe>
+            </li>
+            <li>
+                <ul class="list-content">
+                    <li class="list-title">
+                        <div class="left">
+                            <img @click="handleClickZan(item.id)" src="@/assets/images/icon/mian-dz.png" alt="">
+                            <!-- <img @click="handleClickPush('评论')" src="@/assets/images/icon/mian-ly.png" alt=""> -->
+                            <img @click="show = true" src="@/assets/images/icon/mian-zf.png" alt="">
+                        </div>
+                        <div class="right">
+                            <!-- <img src="@/assets/images/img/mian-dzface1.png" alt="">
+                            <img src="@/assets/images/img/mian-dzface1.png" alt="">
+                            <img src="@/assets/images/img/mian-dzface1.png" alt=""> -->
+                            <p>等{{item.zan}}人觉得赞</p>
+                        </div>
+                    </li>
+                    <li>{{item.contents}}</li>
+                    <!-- <li class="nbsp">
+                        <span>共 5 条回复</span>
+                    </li>
+                    <li class="nbsp">
+                        <p>Cameron AJ&nbsp;&nbsp;<span>回复&nbsp;吃可爱长大</span>&nbsp;哈哈哈</p>
+                    </li>
+                    <li class="nbsp">
+                        <p>吃可爱长大&nbsp;<span>是你说的地方吗？</span></p>
+                    </li> -->
+                </ul>
+            </li>
+        </ul>
+    </div>
     <div class="alert" v-if="show">
         <van-overlay :show="show" @click="show = false" />
         <div class="share">
@@ -63,20 +69,76 @@
 </div>
 </template>
 <script>
+    import { imgURL } from '~api/config'
+
     export default {
         data(){
             return {
-                show : false
+                show : false,
+                list : [],
+                isScrollTop : false,
+                imgURL,
+                pg:1,
+                size:10
             }
         },
+        created(){
+            this.reload(1,10)
+
+        },
+        mounted(){
+            // 滚动事件
+            this.$refs.main.addEventListener('scroll',this.onRefresh);
+        },
         methods:{
-            handleClickPush(test){
-                if(test === "点赞"){
-                    this.$router.push('/home/give');
-                }else if(test === "评论"){
-                    this.$router.push('/home/comment');
+            // 双击点赞
+            handleDblclick(e,s){
+                // console.log('双击',e,s);
+            },
+            handleClickZan(id){
+                this.$router.push('/home/give/'+id);
+            },
+            reload(pg,size){
+                var that= this;
+                var url = `/User/GetUserDynamicList?pg=${pg}&size=${size}`;
+                this.axios.post(url).then(res=>{
+
+                    var data = res.data;
+                    // console.log(data);
+                    if(res.code == 0){
+                        that.isScrollTop = true;
+                        data.forEach(item => {
+                            console.log(item);
+                            if(item.img){
+                                var imgs = item.img.slice(0,-1);
+                                item.imgList = imgs.split("|");
+                            }else{
+                                item.imgList = []
+                            }
+                        });
+                        this.list = this.list.concat(data);
+
+                    }
+
+                }).catch(res=>{
+                    console.log(res);
+                })
+            },
+            onRefresh(){
+                var main = this.$refs.main;
+                var scrollTop = main.scrollTop , mainHeight = main.offsetHeight , scrollHeight= main.scrollHeight;
+
+                if((scrollTop + mainHeight + 60) >= scrollHeight){
+                    if(this.isScrollTop){
+                        this.isScrollTop = false;
+                        var pg = this.pg;
+                        pg++;
+                        this.pg = pg;
+                        this.reload(this.pg,10);
+                    }
                 }
-            }
+                
+            },
         }
     }
 </script>
@@ -88,13 +150,20 @@
 @color-3:#333333;
 @font-a:.28rem;
 .home{
+    padding-top:1rem;
     .home-head{
+        position:fixed;
+        width:100%;
+        background-color:#fff;
+        z-index:1;
+        top:0;
         display:flex;
         justify-content: center;
-        padding:.32rem 0;
+        height:1rem;
+        align-items:center;
         border-bottom:1px solid @color-e;
         img{
-            height:.4rem;
+            height:.48rem;
         }
     }
 }
@@ -114,6 +183,7 @@
             }
         }
         .test{
+            font-family: Lucida,Tahoma,Verdana;
             span{
                 padding-top:.2rem;
                 color:@color-6;
@@ -124,6 +194,7 @@
     .list-ban{
         img{
             width:100%;
+            height:4.2rem;
         }
     }
 }
@@ -204,5 +275,12 @@
             width:1.2rem;
         }
     }
+}
+
+.mainStroll{
+    position:fixed;
+    width:100%;
+    height:82%;
+    overflow-y: auto;
 }
 </style>

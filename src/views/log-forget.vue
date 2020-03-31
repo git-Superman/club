@@ -7,7 +7,7 @@
         </li>
         <li class="forget-item" v-for="(item,i) in forItem" :key="i">
             <span>{{item.x}}</span>
-            <input type="text" :placeholder="item.y">
+            <input type="text" :placeholder="item.y" v-model="item.value">
             <p v-if="item.z">{{item.z}}</p>
         </li>
     </ul>
@@ -15,11 +15,27 @@
 <script>
     export default {
         data(){
-            return {}
+            return {
+                Account:'',
+                Pwd : '',
+                UserName : '',
+                Mobile : ''
+        }
+        },
+        created(){
+            console.log(this.forItem);
         },
         methods:{
             handleClickGo(){
                 this.$router.go(-1);
+            },
+            reload(){
+                this.axios.POST('/User/Reg',{
+                    Account : this.Account,
+                    Pwd : this.Pwd,
+                    UserName : this.UserName,
+                    Mobile : this.Mobile
+                })
             }
         },
         props:{
@@ -28,21 +44,25 @@
                 default:()=>{
                     return [
                         {
+                            x:'昵称',
+                            y:'输入您的名字',
+                            value : ''
+                        },
+                        {
                             x:'手机号码',
-                            y:'输入您的手机号码'
+                            y:'输入您的手机号码',
+                            value : ''
                         },
                         {
                             x:'验证码',
                             y:'输入您手机收到的验证短信码',
-                            z:'发送验证码'
+                            z:'发送验证码',
+                            value : ''
                         },
                         {
                             x:'登录密码',
-                            y:'设定您登录的密码'
-                        },
-                        {
-                            x:'确认密码',
-                            y:'再次输入密码以确认无误'
+                            y:'设定您登录的密码',
+                            value : ''
                         }
                     ]
                 }
@@ -101,6 +121,18 @@
             display:block;
             width:100%;
             border:0;
+        }
+        ::-webkit-input-placeholder{
+            font-size:.28rem;
+        }
+        ::-moz-input-placeholder{
+            font-size:.28rem;
+        }
+        ::-o-input-placeholder{
+            font-size:.28rem;
+        }
+        ::-ms-input-placeholder{
+            font-size:.28rem;
         }
         p{
             flex-shrink: 0;

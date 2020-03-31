@@ -32,14 +32,11 @@
     import icon9 from '@/assets/images/icon/sc-wx.png'
     import icon10 from '@/assets/images/icon/wd-wx.png'
 
-    import icons from "@/assets/images/jlt.png"
-
     export default {
         data(){
             return {
                 show : false,
                 inx : 0,
-                icons,
                 icon : [
                     {
                         istrue : icon1,
@@ -66,6 +63,7 @@
         },
         mounted(){
             this.init();
+            console.log(this.icons);
         },
         methods:{
             handleClickPush(i){
@@ -128,7 +126,7 @@
     -moz-box-shdow:#000 -6px 3px 7px 1px;
 
     img{
-        width:.72rem;
+        width:.6rem;
         padding:.26rem 0;
         position:relative;
     }
@@ -137,7 +135,7 @@
         display:flex;
         align-items:center;
         justify-content: center;
-        background-color:#ffffff;
+        // background: url() no-repeat;
     }
     .footer-item:nth-child(3){
         img{

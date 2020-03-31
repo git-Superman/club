@@ -117,7 +117,7 @@ export default new Router({
           redirect:'give'
         },
         {
-          path:'give',
+          path:'give/:id',
           component:HomeGive
         },
         {
@@ -136,7 +136,7 @@ export default new Router({
           redirect:'details'
         },
         {
-          path:'details',
+          path:'details/:id',
           component:ActivityDetails
         }
         
@@ -170,7 +170,7 @@ export default new Router({
           redirect:'this'
         },
         {
-          path:'this',
+          path:'this/:id',
           component:StoreName
         },
         {
@@ -249,6 +249,15 @@ export default new Router({
           component:MyCommodityDetails
         },
       ]
+    },
+    {
+      path:'*',
+      redirect:'/'
     }
   ]
 })
+
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
