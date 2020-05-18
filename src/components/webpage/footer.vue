@@ -2,44 +2,26 @@
 <div class="ftp">
     <div class="footer">
         <div class="footer-item" v-for="(item,index) in icon" :key="index" @click="handleClickPush(index)">
-            <img :src="index == inx? item.istrue : item.isfalse" :class="inx==2?'action':''" alt="">
-        </div>
-    </div>
-    <div class="footer-serve" v-show="show">
-        <van-overlay :show="show" @click="show = false" zIndex="99999"/>
-        <div class="serve">
-            <div>
-                <img @click="handleClickPush(5)" src="@/assets/images/icon/add-ftw.png" alt="">
-                <p>发图文动态</p>
-            </div>
-            <div>
-                <img @click="handleClickPush(6)" src="@/assets/images/icon/add-fhd.png" alt="">
-                <p>发起活动</p>
-            </div>
+            <img :src="index == inx? item.istrue : item.isfalse"  alt="">
         </div>
     </div>
 </div>
 </template>
 <script>
     import icon1 from '@/assets/images/icon/main-zy-xz.png'
-    import icon2 from '@/assets/images/icon/hd-yx.png'
-    import icon3 from '@/assets/images/icon/add-click.png'
-    import icon4 from '@/assets/images/icon/sc-yx.png'
-    import icon5 from '@/assets/images/icon/wd-yx.png'
+    import icon2 from '@/assets/images/icon/sc-yx.png'
+    import icon4 from '@/assets/images/icon/hd-yx.png'
+    import icon5 from '@/assets/images/icon/wd-yxs.png'
     import icon6 from '@/assets/images/icon/main-wx.png'
-    import icon7 from '@/assets/images/icon/hd-wx.png'
-    import icon8 from '@/assets/images/icon/add-click.png'
-    import icon9 from '@/assets/images/icon/sc-wx.png'
-    import icon10 from '@/assets/images/icon/wd-wx.png'
-
-    import icons from "@/assets/images/jlt.png"
+    import icon7 from '@/assets/images/icon/sc-wx.png'
+    import icon9 from '@/assets/images/icon/hd-wx.png'
+    import icon10 from '@/assets/images/icon/wd-wxs.png'
 
     export default {
         data(){
             return {
                 show : false,
                 inx : 0,
-                icons,
                 icon : [
                     {
                         istrue : icon1,
@@ -48,10 +30,6 @@
                     {
                         istrue : icon2,
                         isfalse :icon7
-                    },
-                    {
-                        istrue : icon3,
-                        isfalse :icon8
                     },
                     {
                         istrue : icon4,
@@ -78,18 +56,16 @@
                         this.$router.push('/webpage/activity');
                     break;
                     case 2 :
-                        this.show = true;
+                        // this.show = true;
+                        this.$router.push('/webpage/addActivity');
                     break;
                     case 3 :
-                        this.$router.push('/webpage/store');
-                    break;
-                    case 4 :
                         this.$router.push('/webpage/my');
                     break;
-                    case 5 :
+                    case 4 :
                         this.$router.push('/dynamic');
                     break;
-                    case 6 :
+                    case 5 :
                         this.$router.push('/dynamic/activity');
                     break;
                 }
@@ -100,10 +76,10 @@
                     this.inx = 0;
                 }else if(name === 'activity'){
                     this.inx = 1;
-                }else if(name === "store"){
-                    this.inx = 3;
+                }else if(name === "addActivity"){
+                    this.inx = 2;
                 }else if(name === 'my'){
-                    this.inx = 4;
+                    this.inx = 3;
                 }
             }
         }
@@ -139,12 +115,12 @@
         justify-content: center;
         background-color:#ffffff;
     }
-    .footer-item:nth-child(3){
-        img{
-            width:1rem;
-            padding:0;
-        }
-    }
+    // .footer-item:nth-child(3){
+    //     img{
+    //         width:1rem;
+    //         padding:0;
+    //     }
+    // }
     img.action{
         z-index:99999;
         background-color:#fff;

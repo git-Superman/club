@@ -25,7 +25,6 @@
 
 import { getMySelfInfo } from '~api'
 import myList from '@/views/my-list'
-// import headImg from '@/assets/images/img/wode-face.png'
     export default {
         data() {
             return {

@@ -7,7 +7,7 @@ import { Dialog } from 'vant'
 Vue.use(Dialog)
 
 
-Axios.defaults.baseURL = 'http://www.blcpoint.com';
+// Axios.defaults.baseURL = 'http://www.blcpoint.com';
 
 // Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -19,7 +19,7 @@ Axios.defaults.baseURL = 'http://www.blcpoint.com';
 //     // var token = null;
 //     // sessionStorage.getItem('token') ? token = sessionStorage.getItem('token') : router.replace({path:'/log/login'});
 //     // config.url.indexOf("?")>0?config.url += `&token=${token}`:config.url += `?token=${token}`;
-    
+
 
 //     return config;
 //   }, function (error) {

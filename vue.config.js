@@ -1,41 +1,25 @@
 const path = require('path');
 function resolve(dir) {
-  return path.join(__dirname,dir);
+  return path.join(__dirname, dir);
 }
 
 module.exports = {
   lintOnSave: false,
-  publicPath:'./',
+  publicPath: './',
   chainWebpack: config => {
     config.resolve.alias
-    .set('~api', resolve('src/api'))
+      .set('~api', resolve('src/api'))
   },
-  proxyTable:{
-    dev: {
-      
-      assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
-        proxyTable: {
-            '/api': {
-                target: 'http://www.blcpoint.com',//后端接口地址
-                changeOrigin: true,//是否允许跨越
-                pathRewrite: {
-                    '^/api': '/api',//重写,
-                }
-            }
-        },
-        host: '192.168.0.104',
-        port: 8081,
-        autoOpenBrowser: false,
-        errorOverlay: true,
-        notifyOnErrors: true,
-        poll: false,
-        useEslint: true,
-        showEslintErrorsInOverlay: false,
-        devtool: 'eval-source-map',
-        cacheBusting: true,
-        cssSourceMap: false,
+  // 跨域
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://www.blcpoint.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   }
-}
-
 }

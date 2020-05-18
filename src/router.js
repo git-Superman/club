@@ -6,6 +6,7 @@ import webpage from './components/webpage/index'
 import webPageHome from './components/webpage/home'
 import webPageActivity from './components/webpage/activity'
 import webPageStore from './components/webpage/store'
+import webAddActivity from './components/webpage/addActivity'
 import webPageMy from './components/webpage/my'
 // 登录
 import log from './components/log/index'
@@ -16,6 +17,7 @@ import loGforget from './components/log/forget'
 import Home from './views/home/index'
 import HomeGive from './views/home/give'
 import HomeComment from './views/home/comment'
+import HomeDetail from './views/home/detail'
 
 import Activity from './views/activity/index'
 import ActivityDetails from './views/activity/details'
@@ -80,6 +82,11 @@ export default new Router({
           component:webPageStore
         },
         {
+          path:'addActivity',
+          name:'addActivity',
+          component:webAddActivity
+        },
+        {
           path:'my',
           name:'my',
           component:webPageMy
@@ -123,6 +130,10 @@ export default new Router({
         {
           path:'comment',
           component:HomeComment
+        },
+        {
+          path:'detail',
+          component:HomeDetail
         }
         
       ]

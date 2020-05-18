@@ -42,6 +42,7 @@
 </template>
 <script>
 import myTitle from '../my-title'
+import { getUserDynamicList } from '~api'
 import isfalse from '@/assets/images/icon/twdt-dz.png'
 import istrue from '@/assets/images/icon/twdt-ydz.png'
 import iconMsg from '@/assets/images/icon/twdt-ly.png'
@@ -61,6 +62,11 @@ export default {
     },
     components:{
         myTitle
+    },
+    created(){
+        getUserDynamicList({},true).then(res=>{
+            console.log(res);
+        })
     },
     methods:{
         handleClick(){
